@@ -390,7 +390,6 @@ local function onVehicleSpawned(gameVehicleID)
 	local veh = be:getObjectByID(gameVehicleID)
 	local newJbeamName = veh:getJBeamFilename()
 
-
 	--print("SPAWN")
 	--dump(veh.mpVehicleType)
 	--dump(isOwn(gameVehicleID) ~= 1)
@@ -508,7 +507,7 @@ local function onVehicleSwitched(oldGameVehicleID, newGameVehicleID)
 				--core_camera.setByName(0,"onboard.rider") -- citybus
 				core_camera.setByName(0,"passenger") -- auto generated
 				core_camera.setByName(0,"onboard.passenger") -- custom
-			elseif not isOwn(newGameVehicleID) and ((skipOthers and tableSize(ownMap) > 0) or newVehicle:getJBeamFilename() == "unicycle") then
+			elseif not isOwn(newGameVehicleID) and ((skipOthers and tableSize(ownMap) > 0) or jbeamMap[newGameVehicleID] == "unicycle") then
 				-- switch away from this vehicle if it shouldn't be accessible
 
 				local vehicles = getAllVehicles()
@@ -662,13 +661,12 @@ local HandleNetwork = {
 	end
 }
 
-
-
 local function handle(rawData)
 	local code = string.sub(rawData, 1, 1)
 	local rawData = string.sub(rawData, 3)
 	HandleNetwork[code](rawData)
 end
+
 
 
 local function saveDefaultRequest()
@@ -704,13 +702,9 @@ local function spawnDefaultRequest()
 end
 
 local function spawnRequest(model, config, colors)
-	dump(model)
-	dump(config)
-	if colors then
-		local colors = core_vehicle_colors.colorStringToColorTable(colors)
-		colors[4] = colors[4]*2
-	end
-	dump(colors)
+	--dump(model)
+	--dump(config)
+	--dump(colors)
 	local currentVehicle = be:getPlayerVehicle(0)
 	if currentVehicle and isOwn(currentVehicle:getID()) and not config.spawnNew then
 		jbeamMap[currentVehicle:getID()] = '-'
