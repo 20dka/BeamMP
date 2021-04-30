@@ -483,18 +483,18 @@ local initDB = extensions.core_jobsystem.wrap(function(job)
   --log('D', 'initDB', 'initDB() ...')
 
   local disableAllMods = false
-  local updatedFromVersion = nil
-  local cmdArgs = Engine.getStartingArgs()
-  for i, v in ipairs(cmdArgs) do
-    if v == '-versionUpdated' then
-      if #cmdArgs > i then
-        updatedFromVersion = cmdArgs[i + 1]
-      end
-      log('I', 'initDB', "Version update found. Coming from version '" .. tostring(updatedFromVersion) .. "'")
-      disableAllMods = true
-      break
-    end
-  end
+  --local updatedFromVersion = nil
+  --local cmdArgs = Engine.getStartingArgs()
+  --for i, v in ipairs(cmdArgs) do
+  --  if v == '-versionUpdated' then
+  --    if #cmdArgs > i then
+  --      updatedFromVersion = cmdArgs[i + 1]
+  --    end
+  --    log('I', 'initDB', "Version update found. Coming from version '" .. tostring(updatedFromVersion) .. "'")
+  --    disableAllMods = true
+  --    break
+  --  end
+  --end
 
   -- check DB version number
   if not dbHeader or dbHeader.version ~= 1.1 then
@@ -1005,16 +1005,16 @@ local function workOffChangedMod(filename, type)
   local modname = getModNameFromPath(filename)
   if mods[modname] and mods[modname].unpackedPath and type == 'added' then
     safeDelete(filename)
-    log('E', 'onFileChanged', 'You have a unpacked version of [ '..modname..' ]. Need to be Packed before update')
+    log('E', '', 'You have a unpacked version of [ '..modname..' ]. Need to be Packed before update')
     guihooks.trigger('modmanagerError', 'You have a unpacked version of [ '..modname..' ]. Need to be Packed before update')
     return
   end
   local dir, basefilename, ext = path.splitWithoutExt(filename)
   if ext == 'zip' and FS:fileExists(filename) and (type == 'added' or type == 'modified') then
-    log('D', 'onFileChanged', tostring(filename) .. ' : ' .. tostring(type) .. ' > ' .. tostring(ext))
+    log('D', '', tostring(filename) .. ' : ' .. tostring(type) .. ' > ' .. tostring(ext))
     local mod, files = updateZIPEntry(filename)
     if mod and mod.active ~= false then
-      log('D', 'onFileChanged', 'activateMod -- ' .. tostring(filename))
+      log('D', '', 'activateMod -- ' .. tostring(filename))
       activateMod(mod.modname)
 	  MPCoreNetwork.modLoaded(mod.modname) -- //////////////////////////////////////////////////////////////																								 
     end
